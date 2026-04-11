@@ -13,13 +13,31 @@ import { Label } from "../components/ui/label.jsx"
 import { Input } from "../components/ui/input.jsx"
 import { Button } from "./ui/button.jsx"
 import { useState } from "react"
+import { toast } from "sonner";
 
 
 export function Navbar() {
 
     const [user, setUser] = useState(null)
+    const [emailLogin, setEmailLogin] = useState("")
+    const [passwordLogin, setPasswordLogin] = useState("")
+
 
     function login() {
+
+
+        if (emailLogin === "") {
+            toast.error("Preencha o campo de email", { position: "top-center" })
+            return
+        }
+
+        if (passwordLogin === "") {
+            toast.error("Preencha o campo de senha", { position: "top-center" })
+            return
+        }
+        toast.success("Login realizado com sucesso!", { position: "top-center" })
+        setEmailLogin("")
+        setPasswordLogin("")
         const userData = { name: "tiago" }
 
         localStorage.setItem("user", JSON.stringify(userData))
@@ -30,11 +48,19 @@ export function Navbar() {
         setUser(null)
     }
 
+    function handleKeyDown(e) {
+        if (e.key === "Enter") {
+            e.preventDefault()
+            login()
+        }
+    }
+
     return (
         <nav>
+            <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet"></link>
             <div>
                 <div className="flex items-center justify-between bg-red-600 p-4">
-                    <h1 className="font-bold text-2xl text-white">Dev<span className="font-bold text-gray-950">Food</span></h1>
+                    <h1 className="font-bold text-2xl  text-white" style={{ fontFamily: 'Bangers' }}>Dev<span style={{ fontFamily: 'Bangers' }} className="font-bold text-gray-950">Food</span></h1>
                     {user ? (
                         <ul className="flex gap-5 text-white items-center">
                             <li><a href="">Home</a></li>
@@ -59,12 +85,12 @@ export function Navbar() {
 
                                                 <div className="flex flex-col gap-2">
                                                     <Label htmlFor="">Email</Label>
-                                                    <Input id="" type="email" className="shadow-md" />
+                                                    <Input onKeyDown={handleKeyDown} value={emailLogin} onChange={(e) => setEmailLogin(e.target.value)} type="email" className="shadow-md" />
                                                 </div>
 
                                                 <div className="flex flex-col gap-2">
                                                     <Label htmlFor="">Senha</Label>
-                                                    <Input id="" type="password" className="shadow-md" />
+                                                    <Input onKeyDown={handleKeyDown} value={passwordLogin} id="passwordLogin" onChange={(e) => setPasswordLogin(e.target.value)} type="password" className="shadow-md" />
                                                 </div>
 
                                                 <Button variant="ghost" className="border-none p-2 text-gray-800 cursor-pointer">Esqueceu sua senha?</Button>

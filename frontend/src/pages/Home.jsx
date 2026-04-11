@@ -12,7 +12,9 @@ export function Home() {
         <div>
 
             <div>
-                <Navbar />
+                <div className="fixed w-full">
+                    <Navbar />
+                </div>
                 <Hero />
                 <Card />
 
