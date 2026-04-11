@@ -1,6 +1,7 @@
 import { Card } from "../components/Card";
 import { Foods } from "../components/Foods";
-import { InputHome } from "../components/InputHome";
+import { Hero } from "../components/Hero";
+
 import { Navbar } from "../components/Navbar";
 
 
@@ -12,8 +13,9 @@ export function Home() {
 
             <div>
                 <Navbar />
+                <Hero />
                 <Card />
-                <InputHome />
+
                 <Foods />
 
             </div>
