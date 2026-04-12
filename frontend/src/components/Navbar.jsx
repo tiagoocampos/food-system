@@ -14,6 +14,7 @@ import { Input } from "../components/ui/input.jsx"
 import { Button } from "./ui/button.jsx"
 import { useState } from "react"
 import { toast } from "sonner";
+import { Spinner } from "../components/ui/spinner.jsx";
 
 
 export function Navbar() {
@@ -21,9 +22,10 @@ export function Navbar() {
     const [user, setUser] = useState(null)
     const [emailLogin, setEmailLogin] = useState("")
     const [passwordLogin, setPasswordLogin] = useState("")
+    const [loading, setLoading] = useState(false)
 
 
-    function login() {
+    const login = async () => {
 
 
         if (emailLogin === "") {
@@ -35,13 +37,38 @@ export function Navbar() {
             toast.error("Preencha o campo de senha", { position: "top-center" })
             return
         }
-        toast.success("Login realizado com sucesso!", { position: "top-center" })
-        setEmailLogin("")
-        setPasswordLogin("")
-        const userData = { name: "tiago" }
+        setLoading(true)
 
-        localStorage.setItem("user", JSON.stringify(userData))
-        setUser(userData)
+        try {
+            const res = await fetch("http://localhost:3000/users/login", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: emailLogin,
+                    senha: passwordLogin,
+                })
+            })
+
+            const data = await res.json()
+            if (!res.ok) {
+                toast.error(data.message, { position: "top-center" })
+                return
+            }
+
+            setUser(data.user)
+            toast.success(data.message, { position: "top-center" })
+
+        } catch (error) {
+            console.error("Erro ao realizar login", error)
+            toast.error("Erro ao realizar login", { position: "top-center" })
+        } finally {
+            setLoading(false)
+            setEmailLogin("")
+            setPasswordLogin("")
+        }
+
+
+
     }
 
     function logout() {
@@ -58,8 +85,9 @@ export function Navbar() {
     const [nomeRegister, setNomeRegister] = useState(null)
     const [emailRegister, setEmailRegister] = useState(null)
     const [senhaRegister, setSenhaRegister] = useState(null)
+    const [confirmarSenhaRegister, setConfirmarSenhaRegister] = useState(null)
     const [nomeSpan, setNomeSpan] = useState("Campo obrigatório")
-    console.log(nomeRegister, emailRegister, senhaRegister)
+    console.log(nomeRegister, emailRegister, senhaRegister, confirmarSenhaRegister)
 
     const register = async () => {
 
@@ -131,6 +159,11 @@ export function Navbar() {
                                                     <Input onKeyDown={handleKeyDown} value={passwordLogin} id="passwordLogin" onChange={(e) => setPasswordLogin(e.target.value)} type="password" className="shadow-md" />
                                                 </div>
 
+                                                {loading && (
+                                                    <div className="mx-auto"><Spinner /></div>
+                                                )
+                                                }
+
                                                 <Button variant="ghost" className="border-none p-2 text-gray-800 cursor-pointer">Esqueceu sua senha?</Button>
                                                 <Button onClick={login} className="bg-red-700 p-2 rounded-[10px] text-white hover:bg-red-900 cursor-pointer">Fazer login</Button>
 
@@ -152,14 +185,9 @@ export function Navbar() {
                                             </SheetHeader>
                                             <div className="flex flex-col  rounded-[10px]  p-5 w-[95%] bg-white mx-auto gap-5">
                                                 <div className="flex flex-col gap-2 ">
-                                                    <Label htmlFor="">Nome</Label>
+                                                    <Label htmlFor="">Nome completo</Label>
                                                     <Input id="" value={nomeRegister} onChange={(e) => setNomeRegister(e.target.value)} className="shadow-md" />
                                                     <span value={nomeSpan} onChange={(e) => setNomeSpan(e.target.value)} className="text-center text-sm text-red-600"></span>
-                                                </div>
-
-                                                <div className="flex flex-col gap-2">
-                                                    <Label htmlFor="">Sobrenome</Label>
-                                                    <Input id="" className="shadow-md" />
                                                 </div>
 
                                                 <div className="flex flex-col gap-2">
@@ -174,7 +202,7 @@ export function Navbar() {
 
                                                 <div className="flex flex-col gap-2">
                                                     <Label htmlFor="">Confirmar senha</Label>
-                                                    <Input id="" type="password" className="shadow-md" />
+                                                    <Input id="" value={confirmarSenhaRegister} onChange={(e) => setConfirmarSenhaRegister(e.target.value)} type="password" className="shadow-md" />
                                                 </div>
 
                                             </div>
