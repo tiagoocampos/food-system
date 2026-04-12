@@ -95,7 +95,7 @@ export function Navbar() {
             toast.error("Preencha todos os campos corretamente", { position: "top-center" })
             return
         }
-
+        setLoading(true)
 
 
         try {
@@ -117,6 +117,12 @@ export function Navbar() {
         } catch (error) {
             console.error("Erro ao registrar usuário", error);
             toast.error("Erro ao registrar usuário", { position: "top-center" })
+        } finally {
+            setLoading(false)
+            setNomeRegister("")
+            setEmailRegister("")
+            setSenhaRegister("")
+            setConfirmarSenhaRegister("")
         }
     }
 
@@ -204,6 +210,11 @@ export function Navbar() {
                                                     <Label htmlFor="">Confirmar senha</Label>
                                                     <Input id="" value={confirmarSenhaRegister} onChange={(e) => setConfirmarSenhaRegister(e.target.value)} type="password" className="shadow-md" />
                                                 </div>
+
+                                                {loading && (
+                                                    <div className="mx-auto"><Spinner /></div>
+                                                )
+                                                }
 
                                             </div>
                                             <SheetFooter>
