@@ -55,6 +55,44 @@ export function Navbar() {
         }
     }
 
+    const [nomeRegister, setNomeRegister] = useState(null)
+    const [emailRegister, setEmailRegister] = useState(null)
+    const [senhaRegister, setSenhaRegister] = useState(null)
+    const [nomeSpan, setNomeSpan] = useState("Campo obrigatório")
+    console.log(nomeRegister, emailRegister, senhaRegister)
+
+    const register = async () => {
+
+        if (nomeRegister === "" || emailRegister === "" || senhaRegister === "") {
+            toast.error("Preencha todos os campos corretamente", { position: "top-center" })
+            return
+        }
+
+
+
+        try {
+            const res = await fetch("http://localhost:3000/users/register", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nome: nomeRegister,
+                    email: emailRegister,
+                    senha: senhaRegister,
+                })
+            })
+
+            const data = await res.json()
+            if (!res.ok) {
+                toast.error(data.message, { position: "top-center" })
+            }
+            data && toast.success(data.message, { position: "top-center" })
+        } catch (error) {
+            console.error("Erro ao registrar usuário", error);
+            toast.error("Erro ao registrar usuário", { position: "top-center" })
+        }
+    }
+
+
     return (
         <nav>
             <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet"></link>
@@ -115,7 +153,8 @@ export function Navbar() {
                                             <div className="flex flex-col  rounded-[10px]  p-5 w-[95%] bg-white mx-auto gap-5">
                                                 <div className="flex flex-col gap-2 ">
                                                     <Label htmlFor="">Nome</Label>
-                                                    <Input id="" className="shadow-md" />
+                                                    <Input id="" value={nomeRegister} onChange={(e) => setNomeRegister(e.target.value)} className="shadow-md" />
+                                                    <span value={nomeSpan} onChange={(e) => setNomeSpan(e.target.value)} className="text-center text-sm text-red-600"></span>
                                                 </div>
 
                                                 <div className="flex flex-col gap-2">
@@ -125,12 +164,12 @@ export function Navbar() {
 
                                                 <div className="flex flex-col gap-2">
                                                     <Label htmlFor="">Email</Label>
-                                                    <Input id="" type="email" className="shadow-md" />
+                                                    <Input id="" value={emailRegister} onChange={(e) => setEmailRegister(e.target.value)} type="email" className="shadow-md" />
                                                 </div>
 
                                                 <div className="flex flex-col gap-2">
                                                     <Label htmlFor="">Senha</Label>
-                                                    <Input id="" type="password" className="shadow-md" />
+                                                    <Input id="" value={senhaRegister} onChange={(e) => setSenhaRegister(e.target.value)} type="password" className="shadow-md" />
                                                 </div>
 
                                                 <div className="flex flex-col gap-2">
@@ -140,7 +179,7 @@ export function Navbar() {
 
                                             </div>
                                             <SheetFooter>
-                                                <Button className="bg-red-700 p-2 rounded-[10px] text-white hover:bg-red-900 cursor-pointer">Criar conta</Button>
+                                                <Button onClick={register} className="bg-red-700 p-2 rounded-[10px] text-white hover:bg-red-900 cursor-pointer">Criar conta</Button>
                                             </SheetFooter>
                                         </SheetContent>
                                     </Sheet>
