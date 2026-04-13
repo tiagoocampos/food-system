@@ -6,10 +6,10 @@ function App() {
 
 
   return (
-    <>
+    <div className="bg-gray-50">
       <Toaster />
       <Home />
-    </>
+    </div>
   )
 }
 

@@ -4,8 +4,8 @@ import { sql } from "drizzle-orm";
 export async function testConnection() {
   try {
     await db.execute(sql`SELECT 1`);
-    console.log("🔥 Conexão com o banco OK!");
+    console.log("Conexão com o banco bem sucedida");
   } catch (error) {
-    console.log("❌ Erro na conexão:", error);
+    console.log("erro na conexão:", error);
   }
 }
