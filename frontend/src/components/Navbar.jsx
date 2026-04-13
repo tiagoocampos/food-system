@@ -80,6 +80,10 @@ export function Navbar() {
             toast.error("Preencha todos os campos corretamente", { position: "top-center" })
             return
         }
+        if (senhaRegister !== confirmarSenhaRegister) {
+            toast.error("As senhas não coincidem", { position: "top-center" })
+            return
+        }
         setLoading(true)
         try {
             const res = await fetch("http://localhost:3000/users/register", {
