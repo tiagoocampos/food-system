@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Foods } from "./Foods";
 import { Button } from "./ui/button";
+import { Hamburger } from "lucide-react";
 
 export function Category() {
     const [mostrarFoods, setMostrarFoods] = useState(false);
@@ -13,13 +14,13 @@ export function Category() {
                 className="bg-red-600 cursor-pointer hover:bg-red-400"
                 onClick={() => setMostrarFoods(true)}
             >
-                Lanches
+                <Hamburger /> Lanches
             </Button>
 
-            {/* MODAL */}
+
             {mostrarFoods && (
                 <div
-                    className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+                    className="fixed w-80 md:w-full inset-0 bg-black/50 flex items-center justify-center z-50"
                     onClick={() => setMostrarFoods(false)}
                 >
                     <div

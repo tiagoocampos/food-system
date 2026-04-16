@@ -29,11 +29,11 @@ export function Foods() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mx-auto rounded-xl p-4 sm:p-5 w-full max-w-7xl mt-4">
 
-                <div className="flex hover:scale-[1.09] duration-500 shadow-md bg-red-200 rounded-xl flex-col">
+                <div className="flex mx-auto w-70 md:w-full md:hover:scale-[1.09] duration-500 shadow-md bg-red-200 rounded-xl flex-col">
                     <img
                         src="/hamb-1.jpg"
                         alt="hamburguer"
-                        className="w-full rounded-t-xl aspect-4/3 object-cover"
+                        className="w-70 md:w-full rounded-t-xl aspect-4/3 object-cover"
                     />
                     <div className="flex flex-col items-center justify-center p-3">
                         <h1 className="font-bold mt-2 text-gray-800">Hamburguer Gourmet</h1>
@@ -43,11 +43,11 @@ export function Foods() {
                     </div>
                 </div>
 
-                <div className="flex hover:scale-[1.09] duration-500 shadow-md bg-red-200 rounded-xl flex-col">
+                <div className="flex w-70 mx-auto md:w-full md:hover:scale-[1.09] duration-500 shadow-md bg-red-200 rounded-xl flex-col">
                     <img
                         src="/pizza1.jpg"
                         alt="pizza"
-                        className="w-full rounded-t-xl aspect-4/3 object-cover"
+                        className="md:w-full w-70 rounded-t-xl aspect-4/3 object-cover"
                     />
                     <div className="flex flex-col items-center justify-center p-3">
                         <h1 className="font-bold mt-2 text-gray-800">Pizza especial</h1>
@@ -56,11 +56,11 @@ export function Foods() {
                     </div>
                 </div>
 
-                <div className="flex hover:scale-[1.09] duration-500 shadow-md bg-red-200 rounded-xl flex-col">
+                <div className="flex w-70 mx-auto md:w-full md:hover:scale-[1.09] duration-500 shadow-md bg-red-200 rounded-xl flex-col">
                     <img
                         src="/batata.jpg"
                         alt="Batata frita"
-                        className="w-full rounded-t-xl aspect-4/3 object-cover"
+                        className="w-70 md:w-full rounded-t-xl aspect-4/3 object-cover"
                     />
                     <div className="flex flex-col items-center justify-center p-3">
                         <h1 className="font-bold mt-2 text-gray-800">Batata Frita</h1>
@@ -69,11 +69,11 @@ export function Foods() {
                     </div>
                 </div>
 
-                <div className="flex hover:scale-[1.09] duration-500 shadow-md bg-red-200 rounded-xl flex-col">
+                <div className="flex w-70 mx-auto md:w-full md:hover:scale-[1.09] duration-500 shadow-md bg-red-200 rounded-xl flex-col">
                     <img
                         src="/coxinha.jpg"
                         alt="Coxinha"
-                        className="w-full rounded-t-xl aspect-4/3 object-cover"
+                        className="w-70 md:w-full rounded-t-xl aspect-4/3 object-cover"
                     />
                     <div className="flex flex-col text-center items-center justify-center p-3">
                         <h1 className="font-bold mt-2 text-gray-800">Coxinhas</h1>
