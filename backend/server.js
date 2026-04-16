@@ -3,6 +3,7 @@ import cors from "cors"
 import dotenv from "dotenv"
 import { testConnection } from "./database/testConnection.js";
 import usersRoutes from "./routes/usersRoutes.js";
+import produtosRoutes from "./routes/produtosRoutes.js";
 
 const app = express();
 dotenv.config();
@@ -15,6 +16,8 @@ app.get("/", (req, res) => {
 })
 
 app.use("/users", usersRoutes);
+app.use("/produtos", produtosRoutes);
+
 
 app.listen(process.env.PORT, () => {
     console.log(`Servidor rodando na porta http://localhost:${process.env.PORT}`);

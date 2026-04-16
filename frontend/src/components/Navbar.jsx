@@ -14,7 +14,7 @@ import { Button } from "./ui/button.jsx"
 import { useState } from "react"
 import { toast } from "sonner";
 import { Spinner } from "../components/ui/spinner.jsx";
-import { Menu } from "lucide-react"
+import { Heart, Menu, User } from "lucide-react"
 
 
 export function Navbar() {
@@ -80,7 +80,7 @@ export function Navbar() {
             toast.error("Preencha todos os campos corretamente", { position: "top-center" })
             return
         }
-        if (senhaRegister !== confirmarSenhaRegister) {
+        else if (senhaRegister !== confirmarSenhaRegister) {
             toast.error("As senhas não coincidem", { position: "top-center" })
             return
         }
@@ -123,7 +123,12 @@ export function Navbar() {
                         {user ? (
                             <>
                                 <li><a href="" className="text-red-600">Home</a></li>
-                                <li><p className="text-red-600">Olá, {user.nome}</p></li>
+                                <li><p className="text-red-600">Olá, <span className="text-white">{user.nome}</span></p></li>
+                                <li className="text-red-600 hover:text-red-400 duration-300"><a className="flex" href=""><User />Perfil</a></li>
+                                <li><a href="" className="text-red-600 hover:text-red-400 flex duration-300"><Heart />Favoritos</a></li>
+                                <li><a className="text-red-600 hover:text-red-400" href="">Meu carrinho</a></li>
+
+
                                 <li>
                                     <Button onClick={logout} className="bg-red-700 p-2 rounded-[10px] text-white hover:bg-red-900 cursor-pointer">
                                         Sair
@@ -223,7 +228,7 @@ export function Navbar() {
                                         <div className="flex flex-col mt-4">
                                             {user ? (
                                                 <>
-                                                    <p className="px-5 py-3 text-red-600 font-medium border-b border-gray-100">Olá, {user.name}</p>
+                                                    <p className="px-5 py-3 text-red-600 font-medium border-b border-gray-100">Olá, {user.nome}</p>
                                                     <a href="" className="px-5 py-4 text-gray-800 font-medium border-b border-gray-100 hover:bg-gray-50">Home</a>
                                                     <button
                                                         onClick={logout}

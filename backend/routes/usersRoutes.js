@@ -2,6 +2,7 @@ import { Router } from "express";
 import { db } from "../database/db.js";
 import { usuarios } from "../database/schema.js";
 import { and, eq } from "drizzle-orm";
+import bcrypt from "bcrypt";
 
 const router = Router();
 
@@ -12,11 +13,11 @@ router.post("/register", async (req, res) => {
         if(!nome || !email || !senha) {
             return res.status(400).json({ message: "Todos os campos são obrigatórios" });
         }
-
+        const senhaHash = await bcrypt.hash(senha, 10);
         const user = await db.insert(usuarios).values({
             nome,
             email,
-            senha,
+            senha: senhaHash,
         }).returning();
 
         res.status(201).json({ message: "Usuário cadastrado com sucesso",
@@ -39,17 +40,23 @@ router.post("/login", async (req, res) => {
             res.status(400).json({ message: "Email e senha são obrigatórios" });
             return
         }
+        
         const user = await db
         .select()
         .from(usuarios)
         .where(
             and(
                 eq(usuarios.email, email),
-                eq(usuarios.senha, senha)
+               
 
         ))
 
         if (user.length === 0) {
+            res.status(401).json({ message: "Email ou senha inválidos" });
+            return
+        }
+        const senhaValida = await bcrypt.compare(senha, user[0].senha)
+        if (!senhaValida){
             res.status(401).json({ message: "Email ou senha inválidos" });
             return
         }
