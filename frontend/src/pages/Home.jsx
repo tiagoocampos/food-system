@@ -20,7 +20,6 @@ export function Home() {
             <main className="flex-1 mt-20">
                 <Hero />
                 <Card />
-                {/* <Foods /> */}
                 <Category />
             </main>
 

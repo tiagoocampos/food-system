@@ -11,16 +11,16 @@ export function Category() {
             <h1>Categorias</h1>
 
             <Button
-                className="bg-red-600 cursor-pointer hover:bg-red-400"
+                className="bg-red-600 cursor-pointer p-10 text-3xl hover:bg-red-400"
                 onClick={() => setMostrarFoods(true)}
             >
-                <Hamburger /> Lanches
+                <Hamburger className="" /> Lanches
             </Button>
 
 
             {mostrarFoods && (
                 <div
-                    className="fixed w-80 md:w-full inset-0 bg-black/50 flex items-center justify-center z-50"
+                    className="fixed w-full md:w-full inset-0 bg-black/50 flex items-center justify-center z-50"
                     onClick={() => setMostrarFoods(false)}
                 >
                     <div
@@ -29,7 +29,7 @@ export function Category() {
                     >
                         {/* Botão fechar */}
                         <button
-                            className="absolute top-3 right-3 text-gray-600 hover:text-black text-xl"
+                            className="absolute top-3 right-3 text-gray-600 hover:text-black tex-xl"
                             onClick={() => setMostrarFoods(false)}
                         >
                             ✕

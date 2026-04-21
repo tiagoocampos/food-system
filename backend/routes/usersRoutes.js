@@ -3,6 +3,9 @@ import { db } from "../database/db.js";
 import { usuarios } from "../database/schema.js";
 import { and, eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { configDotenv } from "dotenv";
+configDotenv();
 
 const router = Router();
 
@@ -60,7 +63,15 @@ router.post("/login", async (req, res) => {
             res.status(401).json({ message: "Email ou senha inválidos" });
             return
         }
-        res.status(200).json({ message: "Login realizado com sucesso", user: {
+
+        const token = jwt.sign(
+            { id: user[0].id, email: user[0].email },
+            process.env.JWT_SECRET,
+            { expiresIn: "7d" }
+        )
+        res.status(200).json({ message: "Login realizado com sucesso",
+            token,
+             user: {
             id: user[0].id,
             nome: user[0].nome,
             email: user[0].email,
@@ -68,6 +79,21 @@ router.post("/login", async (req, res) => {
     } catch (error) {
         console.error("Erro de servidor", error);
         res.status(500).json({ message: "Erro no servidor" });
+    }
+})
+
+router.get("/me", async (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ message: "Token de autenticação ausente" });
+    }
+    const token = authHeader.split(" ")[1];
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        res.status(200).json({ valid: true, user:decoded })
+    } catch (error) {
+        res.status(401).json({ message: "Token de autenticação inválido" });
     }
 })
 

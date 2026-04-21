@@ -15,11 +15,16 @@ import { useState } from "react"
 import { toast } from "sonner";
 import { Spinner } from "../components/ui/spinner.jsx";
 import { Heart, Menu, User } from "lucide-react"
+import { useNavigate } from "react-router-dom";
+import { Home } from "../pages/Home.jsx"
 
 
 export function Navbar() {
-
-    const [user, setUser] = useState(null)
+    const navigate = useNavigate()
+    const [user, setUser] = useState(() => {
+        const salvo = localStorage.getItem("user")
+        return salvo ? JSON.parse(salvo) : null
+    })
     const [emailLogin, setEmailLogin] = useState("")
     const [passwordLogin, setPasswordLogin] = useState("")
     const [loading, setLoading] = useState(false)
@@ -47,7 +52,10 @@ export function Navbar() {
                 return
             }
             setUser(data.user)
+            localStorage.setItem("token", data.token)
+            localStorage.setItem("user", JSON.stringify(data.user))
             toast.success(data.message, { position: "top-center" })
+
         } catch (error) {
             console.error("Erro ao realizar login", error)
             toast.error("Erro ao realizar login", { position: "top-center" })
@@ -60,19 +68,16 @@ export function Navbar() {
 
     function logout() {
         setUser(null)
+        localStorage.removeItem("token")
+        localStorage.removeItem("user")
     }
 
-    function handleKeyDown(e) {
-        if (e.key === "Enter") {
-            e.preventDefault()
-            login()
-        }
-    }
 
-    const [nomeRegister, setNomeRegister] = useState(null)
-    const [emailRegister, setEmailRegister] = useState(null)
-    const [senhaRegister, setSenhaRegister] = useState(null)
-    const [confirmarSenhaRegister, setConfirmarSenhaRegister] = useState(null)
+
+    const [nomeRegister, setNomeRegister] = useState("")
+    const [emailRegister, setEmailRegister] = useState("")
+    const [senhaRegister, setSenhaRegister] = useState("")
+    const [confirmarSenhaRegister, setConfirmarSenhaRegister] = useState("")
     const [nomeSpan, setNomeSpan] = useState("Campo obrigatório")
 
     const register = async () => {
@@ -107,6 +112,20 @@ export function Navbar() {
             setConfirmarSenhaRegister("")
         }
     }
+
+    function handleKeyDownLogin(e) {
+        if (e.key === "Enter") {
+            e.preventDefault()
+            login()
+        }
+    }
+
+    function handleKeyDownRegister(e) {
+        if (e.key === "Enter") {
+            e.preventDefault()
+            register()
+        }
+    }
     const [open, setOpen] = useState(false)
     return (
         <nav>
@@ -122,7 +141,7 @@ export function Navbar() {
                     <ul className="hidden sm:flex gap-5 text-white items-center">
                         {user ? (
                             <>
-                                <li><a href="" className="text-red-600">Home</a></li>
+                                <li><a onClick={() => navigate("/")} href="" className="text-red-600">Home</a ></li>
                                 <li><p className="text-red-600">Olá, <span className="text-white">{user.nome}</span></p></li>
                                 <li className="text-red-600 hover:text-red-400 duration-300"><a className="flex" href=""><User />Perfil</a></li>
                                 <li><a href="" className="text-red-600 hover:text-red-400 flex duration-300"><Heart />Favoritos</a></li>
@@ -139,8 +158,9 @@ export function Navbar() {
                             <>
                                 {/* <li><a className="bg-red-600 inline-flex p-2 rounded-[12px]" href="">Home</a></li> */}
 
+                                <li><button onClick={() => navigate("/")} href="" className="text-red-600 cursor-pointer hover:text-red-400">Home</button ></li>
+                                <li className="">
 
-                                <li>
                                     <Sheet>
                                         <SheetTrigger className="cursor-pointer text-red-600 font-medium tracking-wide rounded-[12px] p-2 hover:text-red-400">criar conta</SheetTrigger>
                                         <SheetContent className="w-[90%] sm:max-w-md px-4 sm:px-6">
@@ -151,20 +171,20 @@ export function Navbar() {
                                             <div className="flex flex-col rounded-[10px] p-5 w-full bg-white mx-auto gap-5 mt-4">
                                                 <div className="flex flex-col gap-2">
                                                     <Label>Nome completo</Label>
-                                                    <Input value={nomeRegister} onChange={(e) => setNomeRegister(e.target.value)} className="shadow-md text-base" />
+                                                    <Input onKeyDown={handleKeyDownRegister} value={nomeRegister} onChange={(e) => setNomeRegister(e.target.value)} className="shadow-md text-base" />
                                                     <span className="text-center text-sm text-red-600"></span>
                                                 </div>
                                                 <div className="flex flex-col gap-2">
                                                     <Label>Email</Label>
-                                                    <Input value={emailRegister} onChange={(e) => setEmailRegister(e.target.value)} type="email" className="shadow-md text-base" />
+                                                    <Input onKeyDown={handleKeyDownRegister} value={emailRegister} onChange={(e) => setEmailRegister(e.target.value)} type="email" className="shadow-md text-base" />
                                                 </div>
                                                 <div className="flex flex-col gap-2">
                                                     <Label>Senha</Label>
-                                                    <Input value={senhaRegister} onChange={(e) => setSenhaRegister(e.target.value)} type="password" className="shadow-md text-base" />
+                                                    <Input onKeyDown={handleKeyDownRegister} value={senhaRegister} onChange={(e) => setSenhaRegister(e.target.value)} type="password" className="shadow-md text-base" />
                                                 </div>
                                                 <div className="flex flex-col gap-2">
                                                     <Label>Confirmar senha</Label>
-                                                    <Input value={confirmarSenhaRegister} onChange={(e) => setConfirmarSenhaRegister(e.target.value)} type="password" className="shadow-md text-base" />
+                                                    <Input onKeyDown={handleKeyDownRegister} value={confirmarSenhaRegister} onChange={(e) => setConfirmarSenhaRegister(e.target.value)} type="password" className="shadow-md text-base" />
                                                 </div>
                                                 {loading && <div className="mx-auto"><Spinner /></div>}
                                             </div>
@@ -186,11 +206,11 @@ export function Navbar() {
                                             <div className="flex flex-col rounded-[10px] p-5 w-full bg-white mx-auto gap-5 mt-4">
                                                 <div className="flex flex-col gap-2">
                                                     <Label>Email</Label>
-                                                    <Input onKeyDown={handleKeyDown} value={emailLogin} onChange={(e) => setEmailLogin(e.target.value)} type="email" className="shadow-md text-base" />
+                                                    <Input onKeyDown={handleKeyDownLogin} value={emailLogin} onChange={(e) => setEmailLogin(e.target.value)} type="email" className="shadow-md text-base" />
                                                 </div>
                                                 <div className="flex flex-col gap-2">
                                                     <Label>Senha</Label>
-                                                    <Input onKeyDown={handleKeyDown} value={passwordLogin} id="passwordLogin" onChange={(e) => setPasswordLogin(e.target.value)} type="password" className="shadow-md text-base" />
+                                                    <Input onKeyDown={handleKeyDownLogin} value={passwordLogin} id="passwordLogin" onChange={(e) => setPasswordLogin(e.target.value)} type="password" className="shadow-md text-base" />
                                                 </div>
                                                 {loading && <div className="mx-auto"><Spinner /></div>}
                                                 <Button variant="ghost" className="border-none p-2 text-gray-800 cursor-pointer">Esqueceu sua senha?</Button>
@@ -229,7 +249,7 @@ export function Navbar() {
                                             {user ? (
                                                 <>
                                                     <p className="px-5 py-3 text-red-600 font-medium border-b border-gray-100">Olá, {user.nome}</p>
-                                                    <a href="" className="px-5 py-4 text-gray-800 font-medium border-b border-gray-100 hover:bg-gray-50">Home</a>
+                                                    <button onClick={() => navigate("/")} href="" className="px-5 py-4 text-gray-800 font-medium border-b border-gray-100 hover:bg-gray-50">Home</button>
                                                     <button
                                                         onClick={logout}
                                                         className="px-5 py-4 text-left text-red-600 font-medium hover:bg-gray-50"
@@ -239,7 +259,7 @@ export function Navbar() {
                                                 </>
                                             ) : (
                                                 <>
-                                                    <a href="" className="px-5 py-4 text-gray-800 font-medium border-b border-gray-100 hover:bg-gray-50">
+                                                    <a onClick={() => navigate("/")} href="" className="px-5 py-4 text-gray-800 font-medium border-b border-gray-100 hover:bg-gray-50">
                                                         Home
                                                     </a>
                                                     <button
@@ -276,11 +296,11 @@ export function Navbar() {
                                         <div className="flex flex-col rounded-[10px] p-5 w-full bg-white mx-auto gap-5 mt-2">
                                             <div className="flex flex-col gap-2">
                                                 <Label>Email</Label>
-                                                <Input onKeyDown={handleKeyDown} value={emailLogin} onChange={(e) => setEmailLogin(e.target.value)} type="email" className="shadow-md text-base" />
+                                                <Input onKeyDown={handleKeyDownLogin} value={emailLogin} onChange={(e) => setEmailLogin(e.target.value)} type="email" className="shadow-md text-base" />
                                             </div>
                                             <div className="flex flex-col gap-2">
                                                 <Label>Senha</Label>
-                                                <Input onKeyDown={handleKeyDown} value={passwordLogin} onChange={(e) => setPasswordLogin(e.target.value)} type="password" className="shadow-md text-base" />
+                                                <Input onKeyDown={handleKeyDownLogin} value={passwordLogin} onChange={(e) => setPasswordLogin(e.target.value)} type="password" className="shadow-md text-base" />
                                             </div>
                                             {loading && <div className="mx-auto"><Spinner /></div>}
                                             <Button variant="ghost" className="border-none p-2 text-gray-800 cursor-pointer text-sm">Esqueceu sua senha?</Button>
@@ -314,11 +334,11 @@ export function Navbar() {
                                             </div>
                                             <div className="flex flex-col gap-2">
                                                 <Label>Senha</Label>
-                                                <Input value={senhaRegister} onChange={(e) => setSenhaRegister(e.target.value)} type="password" className="shadow-md text-base" />
+                                                <Input onKeyDown={handleKeyDownRegister} value={senhaRegister} onChange={(e) => setSenhaRegister(e.target.value)} type="password" className="shadow-md text-base" />
                                             </div>
                                             <div className="flex flex-col gap-2">
                                                 <Label>Confirmar senha</Label>
-                                                <Input value={confirmarSenhaRegister} onChange={(e) => setConfirmarSenhaRegister(e.target.value)} type="password" className="shadow-md text-base" />
+                                                <Input onKeyDown={handleKeyDownRegister} value={confirmarSenhaRegister} onChange={(e) => setConfirmarSenhaRegister(e.target.value)} type="password" className="shadow-md text-base" />
                                             </div>
                                             {loading && <div className="mx-auto"><Spinner /></div>}
                                             <Button onClick={register} className="bg-red-700 p-2 rounded-[10px] text-white hover:bg-red-900 cursor-pointer w-full mt-2">Criar conta</Button>

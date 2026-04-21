@@ -1,8 +1,12 @@
 import { Search } from "lucide-react";
 import { Hamburguer } from "../pages/Hamburguer";
+import { useNavigate } from "react-router-dom";
+
 
 
 export function Foods() {
+
+    const navigate = useNavigate();
     return (
         <div className="flex flex-col justify-center text-center px-4 py-6">
 
@@ -38,7 +42,7 @@ export function Foods() {
                     <div className="flex flex-col items-center justify-center p-3">
                         <h1 className="font-bold mt-2 text-gray-800">Hamburguer Gourmet</h1>
                         <p className="text-gray-600 mt-3 text-sm">Hamburguer gourmet especial</p>
-                        <a href="../pages/Hamburguer" className="p-2 cursor-pointer rounded-[20px] duration-500 hover:bg-gray-950 w-25 mt-4 text-white bg-gray-900">Ver</a>
+                        <button onClick={() => navigate("/hamburguer")} className="p-2 cursor-pointer rounded-[20px] duration-500 hover:bg-gray-950 w-25 mt-4 text-white bg-gray-900">Ver</button>
 
                     </div>
                 </div>
